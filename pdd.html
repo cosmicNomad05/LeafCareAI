@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LeafCare AI - Disease Detection</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css">
+
+  <style>
+    body { background: var(--bs-body-bg); }
+    .sidebar {
+      min-height: 100vh;
+      width: 250px;
+      position: fixed;
+      top: 0; left: 0;
+      background: var(--bs-light-bg-subtle);
+      border-right: 1px solid var(--bs-border-color);
+      padding-top: 1rem;
+    }
+    .sidebar .nav-link { color: var(--bs-body-color); }
+    .content { margin-left: 250px; padding: 2rem; }
+    #preview-img { max-height: 300px; object-fit: contain; }
+    .rating i { font-size: 1.5rem; cursor: pointer; color: gray; }
+    .rating i.active { color: gold; }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar d-flex flex-column p-3">
+    <h4 class="mb-4"><i class="bi bi-leaf"></i> LeafCare AI</h4>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li><a href="#home" class="nav-link"><i class="bi bi-house me-2"></i> Home</a></li>
+      <li><a href="#upload" class="nav-link"><i class="bi bi-upload me-2"></i> Upload</a></li>
+      <li><a href="#guidelines" class="nav-link"><i class="bi bi-journal-text me-2"></i> Guidelines</a></li>
+      <li><a href="#settings" class="nav-link"><i class="bi bi-gear me-2"></i> Settings</a></li>
+      <li><a href="#help" class="nav-link"><i class="bi bi-question-circle me-2"></i> Help</a></li>
+      <li><a href="#feedback" class="nav-link"><i class="bi bi-chat-square-text me-2"></i> Feedback</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+
+    <!-- Home -->
+    <section id="home">
+      <h2>Welcome to LeafCare AI</h2>
+      <p>This system helps detect plant leaf diseases using AI-powered CNN models. Use the navigation to explore features.</p>
+    </section>
+    <hr>
+
+    <!-- Upload Section -->
+    <section id="upload" class="my-5">
+      <h3><i class="bi bi-upload"></i> Upload Leaf Image</h3>
+      <p>Select or capture a leaf image for disease detection.</p>
+
+      <form id="uploadForm" class="mb-3">
+        <div class="mb-3">
+          <input type="file" class="form-control" id="imageInput" accept="image/*" capture="environment">
+        </div>
+        <div class="mb-3">
+          <div class="ratio ratio-4x3 bg-light rounded d-flex align-items-center justify-content-center">
+            <img id="preview-img" src="" alt="Preview" class="d-none" />
+            <span id="placeholder" class="text-muted">No image selected</span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success">Predict Disease</button>
+      </form>
+    </section>
+    <hr>
+
+    <!-- Guidelines -->
+    <section id="guidelines" class="my-5">
+      <h3><i class="bi bi-journal-text"></i> Guidelines</h3>
+      <ul>
+        <li>Ensure good lighting when capturing the leaf image.</li>
+        <li>Focus the camera so the leaf is clear and centered.</li>
+        <li>Upload only single-leaf images for accurate results.</li>
+        <li>Wait a few seconds for the system to analyze and display predictions.</li>
+      </ul>
+    </section>
+    <hr>
+
+    <!-- Settings -->
+    <section id="settings" class="my-5">
+      <h3><i class="bi bi-gear"></i> Settings</h3>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="themeToggle">
+        <label class="form-check-label" for="themeToggle">Dark Mode</label>
+      </div>
+    </section>
+    <hr>
+
+    <!-- Help -->
+    <section id="help" class="my-5">
+      <h3><i class="bi bi-question-circle"></i> Help</h3>
+      <p>If you face issues:</p>
+      <ul>
+        <li>Check your internet connection.</li>
+        <li>Ensure the image is clear and in supported format (JPG, PNG).</li>
+        <li>Contact support at <a href="mailto:support@leafcare.ai">support@leafcare.ai</a></li>
+      </ul>
+    </section>
+    <hr>
+
+    <!-- Feedback -->
+    <section id="feedback" class="my-5">
+      <h3><i class="bi bi-chat-square-text"></i> Feedback</h3>
+      <form>
+        <div class="mb-3">
+          <label for="feedbackText" class="form-label">Your Feedback</label>
+          <textarea id="feedbackText" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Rate Us</label>
+          <div class="rating" id="rating">
+            <i class="bi bi-star" data-value="1"></i>
+            <i class="bi bi-star" data-value="2"></i>
+            <i class="bi bi-star" data-value="3"></i>
+            <i class="bi bi-star" data-value="4"></i>
+            <i class="bi bi-star" data-value="5"></i>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+      </form>
+    </section>
+
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Preview image
+    const imageInput = document.getElementById("imageInput");
+    const previewImg = document.getElementById("preview-img");
+    const placeholder = document.getElementById("placeholder");
+
+    imageInput.addEventListener("change", e => {
+      const file = e.target.files[0];
+      if (file) {
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.classList.remove("d-none");
+        placeholder.classList.add("d-none");
+      }
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("change", () => {
+      document.documentElement.setAttribute("data-bs-theme", themeToggle.checked ? "dark" : "light");
+    });
+
+    // Rating stars
+    const stars = document.querySelectorAll("#rating i");
+    stars.forEach(star => {
+      star.addEventListener("click", () => {
+        stars.forEach(s => s.classList.remove("active", "bi-star-fill"));
+        for (let i = 0; i < star.dataset.value; i++) {
+          stars[i].classList.add("active", "bi-star-fill");
+          stars[i].classList.remove("bi-star");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
